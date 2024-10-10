@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
+import com.gasparscienza.prueba_sginnova.dtos.ProjectDTO;
 import com.gasparscienza.prueba_sginnova.model.Project;
 import com.gasparscienza.prueba_sginnova.service.IProjectService;
 
@@ -45,7 +46,7 @@ public class ProjectController {
     
     @GetMapping()
     public ResponseEntity<?> getProjects() {
-        List<Project> projects = iProjectService.getProjects();
+        List<ProjectDTO> projects = iProjectService.getProjects();
         if (projects.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                 .body("No se encontraron proyectos.");
@@ -55,13 +56,13 @@ public class ProjectController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findProject(@PathVariable Long id) {
-        Optional<Project> project = iProjectService.findProject(id);
-        if (!project.isPresent()) {
+        ProjectDTO projectDTO = iProjectService.findProjectDto(id);
+        if (projectDTO == null) {
             // Si no se encuentra el proyecto, devolver un mensaje con estado 404
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                  .body("Proyecto con ID " + id + " no encontrado.");
         }
-        return ResponseEntity.ok(project.get());
+        return ResponseEntity.ok(projectDTO);
     }
 
 

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.gasparscienza.prueba_sginnova.dtos.TaskDTO;
 import com.gasparscienza.prueba_sginnova.dtos.TaskStateDTO;
 import com.gasparscienza.prueba_sginnova.model.State;
 import com.gasparscienza.prueba_sginnova.model.Task;
@@ -62,7 +64,7 @@ public class TaskController {
 
     //Metodo para mostrar las tareas de un proyecto
     @GetMapping()
-    public List<Task> getTasks(@RequestParam(value = "project_id") Long id) {
+    public List<TaskDTO> getTasks(@RequestParam(value = "project_id") Long id) {
         return iTaskService.findTasksByProjectId(id);
     }
 }
