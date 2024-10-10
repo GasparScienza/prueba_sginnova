@@ -13,37 +13,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
-import com.gasparscienza.prueba_sginnova.model.Proyect;
-import com.gasparscienza.prueba_sginnova.service.IProyectService;
+import com.gasparscienza.prueba_sginnova.model.Project;
+import com.gasparscienza.prueba_sginnova.service.IProjectService;
 
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/proyects")
-public class ProyectController {
+@RequestMapping("/projects")
+public class ProjectController {
     
     @Autowired
-    private IProyectService iProyectService;
+    private IProjectService iProjectService;
 
     @PostMapping()
-    public ResponseEntity<String> addProyect(@Valid @RequestBody Proyect proyect) {
+    public ResponseEntity<String> addProject(@Valid @RequestBody Project project) {
         try {
-            iProyectService.addProyect(proyect);
+            iProjectService.addProject(project);
             return ResponseEntity.ok("Proyecto creado");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error al crear el proyecto " + e);
         }
     }
-    //TODO ver si con solo la barra ya toma el /proyects
+    
     @GetMapping()
-    public List<Proyect> getProyects() {
-        return iProyectService.getProyects();
+    public List<Project> getProjects() {
+        return iProjectService.getProjects();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Proyect>> findProyect(@PathVariable Long id) {
-        Optional<Proyect> proyect = iProyectService.findProyect(id);
+    public ResponseEntity<Optional<Project>> findProject(@PathVariable Long id) {
+        Optional<Project> proyect = iProjectService.findProject(id);
         if(!proyect.isPresent()){
             return ResponseEntity.notFound().build();
         }
@@ -51,15 +51,15 @@ public class ProyectController {
     }
 
     @DeleteMapping("/{id}")
-    public String delProyect(@PathVariable Long id) {
-        iProyectService.delProyect(id);
+    public String delProject(@PathVariable Long id) {
+        iProjectService.delProject(id);
         return "Proyecto Eliminado";
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> editProyect(@PathVariable Long id, @Valid @RequestBody Proyect proyect) {
+    public ResponseEntity<String> editProject(@PathVariable Long id, @Valid @RequestBody Project project) {
         try {
-            iProyectService.editProyect(id, proyect.getName(), proyect.getDescription(), proyect.getStartDate(), proyect.getEndDate());
+            iProjectService.editProject(id, project.getName(), project.getDescription(), project.getStartDate(), project.getEndDate());
             return ResponseEntity.ok("Proyecto editado");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error al editar el proyecto" + e);
