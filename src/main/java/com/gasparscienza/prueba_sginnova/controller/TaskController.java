@@ -1,20 +1,18 @@
 package com.gasparscienza.prueba_sginnova.controller;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.gasparscienza.prueba_sginnova.dtos.TaskStateDTO;
 import com.gasparscienza.prueba_sginnova.model.State;
 import com.gasparscienza.prueba_sginnova.model.Task;
@@ -28,65 +26,43 @@ public class TaskController {
 
     @Autowired
     private ITaskService iTaskService;
-
  
     //En este metodo Actualizamos el estado de una tarea
     @PatchMapping("/{id}")
-    public ResponseEntity<String> editState(@PathVariable Long id, @Valid @RequestBody TaskStateDTO taskStateDTO){
+    public ResponseEntity<Map<String, Object>> editState(@PathVariable Long id, @Valid @RequestBody TaskStateDTO taskStateDTO){
+        Map<String, Object> response = new HashMap<>();
         try {
             State state = taskStateDTO.getState();
             iTaskService.editState(id, state);
-            return ResponseEntity.ok("Estado de la tarea fue actualizado a " + state);
+
+            response.put("success", true);
+            response.put("message", "Estado de la tarea fue actualizado a " + state);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al actualizar el estado" + e);
+            response.put("success", false);
+            response.put("message", "Error al actualizar el estado: " + e.getMessage());
+            return ResponseEntity.badRequest().body(response); 
         }
     }
     //Metodo para crear una tarea
     @PostMapping()
-    public ResponseEntity<String> addTask(@Valid @RequestBody Task task) {
+    public ResponseEntity<Map<String, Object>> addTask(@Valid @RequestBody Task task) {
+        Map<String, Object> response = new HashMap<>();
         try {
             iTaskService.addTask(task);
-            return ResponseEntity.ok("Tarea creada");
+            response.put("success", true);
+            response.put("message", "La tarea fue creada correctamente");
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al crear la tarea " + e);
+            response.put("success", false);
+            response.put("message", "Error al crear la tarea: " + e.getMessage());
+            return ResponseEntity.badRequest().body(response);
         }
     }
-    
 
+    //Metodo para mostrar las tareas de un proyecto
     @GetMapping()
     public List<Task> getTasks(@RequestParam(value = "project_id") Long id) {
         return iTaskService.findTasksByProjectId(id);
-    }
-
-    /*
-     * Borrar demas metodos
-     * 
-     * 
-     */
-
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<Task>> findTask(@PathVariable Long id) {
-        Optional<Task> task = iTaskService.findTask(id);
-        if(!task.isPresent()){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(task);
-    }
-
-    @DeleteMapping("/{id}")
-    public String delTask(@PathVariable Long id) {
-        iTaskService.delTask(id);
-        return "Tarea Eliminada";
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<String> editTask(@PathVariable Long id, @Valid @RequestBody Task task) {
-        try {
-            iTaskService.editTask(id, task.getName(), task.getDescription(), task.getState());
-            return ResponseEntity.ok("Tarea editada");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al editar la tarea" + e);
-        }
     }
 }

@@ -1,7 +1,9 @@
 package com.gasparscienza.prueba_sginnova.controller;
 
-
+import java.util.Map;
+import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,33 +29,56 @@ public class ProjectController {
     private IProjectService iProjectService;
 
     @PostMapping()
-    public ResponseEntity<String> addProject(@Valid @RequestBody Project project) {
+    public ResponseEntity<Map<String, Object>> addProject(@Valid @RequestBody Project project) {
+        Map<String, Object> response = new HashMap<>();
         try {
             iProjectService.addProject(project);
-            return ResponseEntity.ok("Proyecto creado");
+            response.put("success", true);
+            response.put("message", "Proyecto creado correctamente");
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al crear el proyecto " + e);
+            response.put("success", false);
+            response.put("message", "Error al crear el proyecto: " + e.getMessage());
+            return ResponseEntity.badRequest().body(response); 
         }
     }
     
     @GetMapping()
-    public List<Project> getProjects() {
-        return iProjectService.getProjects();
+    public ResponseEntity<?> getProjects() {
+        List<Project> projects = iProjectService.getProjects();
+        if (projects.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                .body("No se encontraron proyectos.");
+        }
+        return ResponseEntity.ok(projects);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Project>> findProject(@PathVariable Long id) {
-        Optional<Project> proyect = iProjectService.findProject(id);
-        if(!proyect.isPresent()){
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> findProject(@PathVariable Long id) {
+        Optional<Project> project = iProjectService.findProject(id);
+        if (!project.isPresent()) {
+            // Si no se encuentra el proyecto, devolver un mensaje con estado 404
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                 .body("Proyecto con ID " + id + " no encontrado.");
         }
-        return ResponseEntity.ok(proyect);
+        return ResponseEntity.ok(project.get());
     }
 
+
     @DeleteMapping("/{id}")
-    public String delProject(@PathVariable Long id) {
-        iProjectService.delProject(id);
-        return "Proyecto Eliminado";
+    public ResponseEntity<Map<String, Object>> delProject(@PathVariable Long id) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            iProjectService.delProject(id);
+            response.put("success", true);
+            response.put("message", "Proyecto eliminado correctamente");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Error al eliminar el proyecto: " + e.getMessage());
+            return ResponseEntity.badRequest().body(response); 
+        }
+        
     }
 
     @PutMapping("/{id}")

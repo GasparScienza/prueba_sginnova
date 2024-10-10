@@ -7,11 +7,14 @@ import java.util.Optional;
 
 
 public interface ITaskService {
-    public void addTask(Task task);
+    public String addTask(Task task);
+    public List<Task> findTasksByProjectId(Long id);
+    public String editState(Long id, State state);
+    public Optional<Task> findTask(Long id);
+
+    /*Demas metodos del CRUD de tareas
     public List<Task> getTasks();
     public void delTask(Long id);
-    public Optional<Task> findTask(Long id);
     public void editTask(Long id, String name, String description, State state);
-    public void editState(Long id, State state);
-    public List<Task> findTasksByProjectId(Long id);
+     */
 }

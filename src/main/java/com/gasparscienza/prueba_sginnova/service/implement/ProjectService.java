@@ -18,8 +18,14 @@ public class ProjectService implements IProjectService{
     private ProjectRepository projectRepository;
 
     @Override
-    public void addProject(Project project) {
-        projectRepository.save(project);
+    public String addProject(Project project) {
+        try {
+            projectRepository.save(project);
+            return "Proyecto creado correctamente";
+        } catch (Exception e) {
+            throw new RuntimeException("Error al crear el proyecto " + e);
+        }
+        
     }
 
     @Override
@@ -28,8 +34,17 @@ public class ProjectService implements IProjectService{
     }
 
     @Override
-    public void delProject(Long id) {
-        projectRepository.deleteById(id);
+    public String delProject(Long id) {
+        Project project = projectRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+
+        try {
+            projectRepository.deleteById(id);
+            return "Proyecto eliminado correctamente";
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar el proyecto " + e);
+        }
+        
     }
 
     @Override

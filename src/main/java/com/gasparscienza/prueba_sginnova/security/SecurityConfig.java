@@ -33,8 +33,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET).hasAnyAuthority("USER", "ADMIN")
                         .requestMatchers("/projects/**").hasAuthority("ADMIN")
                         .requestMatchers("/tasks/**").hasAnyAuthority("USER", "ADMIN")
-                // .anyRequest().authenticated() las demas solicito autenticacion con un login
-                // por defecto
                 )
                 .sessionManagement(sessioManager -> sessioManager
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))// Inhabilitamos las sesiones, no
