@@ -32,11 +32,9 @@ public class Proyect {
     private String description;
 
     @NotNull(message = "La fecha de inicio no puede ser nula")
-    @NotBlank(message = "La fecha de inicio no puede estar en blanco")
     private LocalDate startDate;
 
     @NotNull(message = "La fecha de fin no puede ser nula")
-    @NotBlank(message = "La fecha de fin no puede estar en blanco")
     private LocalDate endDate;
 
     @ManyToOne

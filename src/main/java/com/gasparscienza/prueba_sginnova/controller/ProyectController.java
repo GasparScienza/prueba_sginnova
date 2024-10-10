@@ -20,13 +20,13 @@ import com.gasparscienza.prueba_sginnova.service.IProyectService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/proyect")
+@RequestMapping("/proyects")
 public class ProyectController {
     
     @Autowired
     private IProyectService iProyectService;
 
-    @PostMapping("/add")
+    @PostMapping()
     public ResponseEntity<String> addProyect(@Valid @RequestBody Proyect proyect) {
         try {
             iProyectService.addProyect(proyect);
@@ -35,8 +35,8 @@ public class ProyectController {
             return ResponseEntity.badRequest().body("Error al crear el proyecto " + e);
         }
     }
-
-    @GetMapping("/get")
+    //TODO ver si con solo la barra ya toma el /proyects
+    @GetMapping()
     public List<Proyect> getProyects() {
         return iProyectService.getProyects();
     }
@@ -50,13 +50,13 @@ public class ProyectController {
         return ResponseEntity.ok(proyect);
     }
 
-    @DeleteMapping("/del/{id}")
+    @DeleteMapping("/{id}")
     public String delProyect(@PathVariable Long id) {
         iProyectService.delProyect(id);
         return "Proyecto Eliminado";
     }
 
-    @PutMapping("/edit/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<String> editProyect(@PathVariable Long id, @Valid @RequestBody Proyect proyect) {
         try {
             iProyectService.editProyect(id, proyect.getName(), proyect.getDescription(), proyect.getStartDate(), proyect.getEndDate());

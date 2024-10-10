@@ -31,16 +31,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequest -> authRequest
                         .requestMatchers("/auth/**").permitAll() // Permito todas las endpoint /auth/**
                         .requestMatchers(HttpMethod.GET).hasAnyAuthority("USER", "ADMIN")
-                        .requestMatchers(
-                                "/sport/**",
-                                "/characteristic/**",
-                                "/city/**",
-                                "/client/**",
-                                "/company/**",
-                                "/province/**",
-                                "/subscription/**").hasAuthority("ADMIN")
-                        .requestMatchers("/court/**", "/turn/**").hasAnyAuthority("ADMIN")
-                        .requestMatchers("/reservation/**").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/proyects/**").hasAuthority("ADMIN")
+                        .requestMatchers("/tasks/**").hasAnyAuthority("USER", "ADMIN")
                 // .anyRequest().authenticated() las demas solicito autenticacion con un login
                 // por defecto
                 )
