@@ -2,10 +2,16 @@ package com.gasparscienza.prueba_sginnova.service.implement;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import com.gasparscienza.prueba_sginnova.dtos.TaskDTO;
+import com.gasparscienza.prueba_sginnova.mapper.ProjectMapper;
+import com.gasparscienza.prueba_sginnova.mapper.TaskMapper;
 import com.gasparscienza.prueba_sginnova.model.Project;
 import com.gasparscienza.prueba_sginnova.model.Role;
 import com.gasparscienza.prueba_sginnova.model.State;
@@ -95,8 +101,12 @@ public class TaskService implements ITaskService{
     }
 
     @Override
-    public List<Task> findTasksByProjectId(Long id) {
-        return taskRepository.findByProject_id(id);
+    public List<TaskDTO> findTasksByProjectId(Long id) {
+       List<Task> tasks = taskRepository.findByProject_id(id);
+       List<TaskDTO> taskDTOs = tasks.stream().map(
+            task -> TaskMapper.mapper.taskToTaskDTO(task)
+        ).collect(Collectors.toList());
+        return taskDTOs;
     }
     @Override
     public Optional<Task> findTask(Long id) {
