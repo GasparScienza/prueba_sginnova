@@ -3,14 +3,11 @@ package com.gasparscienza.prueba_sginnova.service.implement;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import com.gasparscienza.prueba_sginnova.dtos.TaskDTO;
-import com.gasparscienza.prueba_sginnova.mapper.ProjectMapper;
 import com.gasparscienza.prueba_sginnova.mapper.TaskMapper;
 import com.gasparscienza.prueba_sginnova.model.Project;
 import com.gasparscienza.prueba_sginnova.model.Role;

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
-import java.util.Optional;
 import com.gasparscienza.prueba_sginnova.dtos.ProjectDTO;
 import com.gasparscienza.prueba_sginnova.model.Project;
 import com.gasparscienza.prueba_sginnova.service.IProjectService;
